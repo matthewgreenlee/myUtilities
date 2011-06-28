@@ -6,6 +6,8 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import sun.management.ConnectorAddressLink;
+
 import com.goldenpond.utils.Print;
 
 public class Client {
@@ -23,18 +25,14 @@ public class Client {
 		jmxc.close();
 	}
 
-	public JMXServiceURL extractJMXServiceURL(int pid) throws Exception {
-		String serviceURL = null;
+	public void connect(int pid) throws Exception {
 		try {
-			serviceURL = sun.management.ConnectorAddressLink.importFrom(pid);
+			String serviceURL = ConnectorAddressLink.importFrom(pid);
+			jmxc = JMXConnectorFactory.connect(new JMXServiceURL(serviceURL));
 		} catch (IOException e) {
-			Print.ln("Cannot find process ${pid}");
+			Print.ln("Cannot find process pid: " + pid);
+			throw new RuntimeException(e.getMessage());
 		}
-
-		if (serviceURL == null)
-			return null;
-		else
-			return new JMXServiceURL(serviceURL);
 	}
 
 	public static void main(String[] args) throws Exception {
