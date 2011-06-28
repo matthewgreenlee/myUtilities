@@ -8,80 +8,112 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
+import com.goldenpond.utils.Print;
+
 public class InstallerOptions {
 
-	private CommandLine line;
+	private static final String HELP = "help";
+	private static final String ADMIN_CREDENTIALS = "admin_credentials";
+	private static final String HTTPS_BIND_ADDRESS = "https_bind_address";
+	private static final String DISABLE_HTTP = "disable_http";
+	private static final String BIND_ADDRESS = "bind_address";
+	private static final String INSTALLATION_DIR = "installation_dir";
+	private static final String SERVER = "server";
+
+	private CommandLine commandLine;
 
 	public InstallerOptions(String[] args) {
 		Options options = new Options();
-		Option help = OptionBuilder.create("help");
+
+		Option help = OptionBuilder.create(HELP);
 		options.addOption(help);
-		String[] newArgs = new String[args.length-1];
-		for (int i=1 ; i<args.length ; i++) {
+
+		String[] newArgs = new String[args.length - 1];
+		for (int i = 1; i < args.length; i++) {
 			newArgs[i-1] = "--" + args[i];
 		}
-		Option server = OptionBuilder.withArgName("server")
-				.hasArg(false)
-				.create("server");
-		Option installation_dir = OptionBuilder.withArgName("installation_dir")
-				.hasArgs(2)
-				.create("installation_dir");
-		Option bind_address = OptionBuilder.withArgName("bind_address")
-				.hasArgs(2)
-				.create("bind_address");
-		Option disable_http = OptionBuilder.withArgName("disable_http")
-				.hasArg(false)
-				.create("disable_http");
-		Option https_bind_address = OptionBuilder.withArgName("https_bind_address")
-				.hasArgs(2)
-				.create("https_bind_address");
-		Option admin_credentials = OptionBuilder.withArgName("admin_credentials")
-				.hasArgs(2)
-				.create("admin_credentials");
 
+		OptionBuilder.withArgName(SERVER);
+		OptionBuilder.hasArg(false);
+		Option server = OptionBuilder.create(SERVER);
 		options.addOption(server);
+
+		OptionBuilder.withArgName(INSTALLATION_DIR);
+		OptionBuilder.hasArgs();
+		Option installation_dir = OptionBuilder.create(INSTALLATION_DIR);
 		options.addOption(installation_dir);
-		options.addOption(bind_address);
-		options.addOption(disable_http);
-		options.addOption(https_bind_address);
-		options.addOption(admin_credentials);
 		
+		OptionBuilder.withArgName(BIND_ADDRESS);
+		OptionBuilder.hasArg();
+		Option bind_address = OptionBuilder.create(BIND_ADDRESS);
+		options.addOption(bind_address);
+
+		OptionBuilder.withArgName(DISABLE_HTTP);
+		OptionBuilder.hasArg(false);
+		Option disable_http = OptionBuilder.create(DISABLE_HTTP);
+		options.addOption(disable_http);
+		
+		OptionBuilder.withArgName(HTTPS_BIND_ADDRESS);
+		OptionBuilder.hasArg();
+		Option https_bind_address = OptionBuilder.create(HTTPS_BIND_ADDRESS);
+		options.addOption(https_bind_address);
+
+		OptionBuilder.withArgName(ADMIN_CREDENTIALS);
+		OptionBuilder.hasArg();
+		Option admin_credentials = OptionBuilder.create(ADMIN_CREDENTIALS);
+		options.addOption(admin_credentials);
+
 		CommandLineParser parser = new PosixParser();
 		try {
-			line = parser.parse(options, newArgs);
+			commandLine = parser.parse(options, newArgs);
 		} catch (ParseException e) {
-			System.out.println("please make sure your command was in correct format");
+			Print.ln("please make sure your command was in correct format");
 			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	public String getInstallationDir() {
-		return line.getOptionValue("installation_dir");
+		return commandLine.getOptionValue(INSTALLATION_DIR);
 	}
 
 	public String getBindAddress() {
-		return line.getOptionValue("bind_address");
+		return commandLine.getOptionValue(BIND_ADDRESS);
 	}
 
 	public boolean isDisableHttp() {
-		return line.hasOption("disable_http");
+		return commandLine.hasOption(DISABLE_HTTP);
 	}
 
 	public String getHttpsBindAddress() {
-		return line.getOptionValue("https_bind_address");
+		return commandLine.getOptionValue(HTTPS_BIND_ADDRESS);
+	}
+
+	public String getHttpsBindAddressHost() {
+		return getHttpsBindAddress().split(":")[0];
+	}
+
+	public String getHttpsBindAddressPort() {
+		return getHttpsBindAddress().split(":")[1];
 	}
 
 	public String getAdminCredentials() {
-		return line.getOptionValue("admin_credentials");
+		return commandLine.getOptionValue(ADMIN_CREDENTIALS);
 	}
 
 	public static void main(String[] args) {
-		InstallerOptions psmArgs = new InstallerOptions(args);
-		System.out.println(psmArgs.getInstallationDir());
-		System.out.println(psmArgs.getBindAddress());
-		System.out.println(psmArgs.isDisableHttp());
-		System.out.println(psmArgs.getHttpsBindAddress());
-		System.out.println(psmArgs.getAdminCredentials());
+		args = new String[] { "--install", "server",
+				"installation_dir=D:/dynatrace", "bind_address=0.0.0.0:8899",
+				"disable_http", "https_bind_address=0.0.0.0:443",
+				"admin_credentials=admin/admin" };
+		InstallerOptions opts = new InstallerOptions(args);
+		Print.ln(opts.getInstallationDir());
+		Print.ln(opts.getBindAddress());
+		Print.ln(opts.isDisableHttp());
+		Print.ln(opts.getHttpsBindAddress());
+		Print.ln(opts.getHttpsBindAddressHost());
+		Print.ln(opts.getHttpsBindAddressPort());
+		Print.ln(opts.getAdminCredentials());
 	}
 
 }
