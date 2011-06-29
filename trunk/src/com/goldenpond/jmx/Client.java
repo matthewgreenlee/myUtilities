@@ -1,6 +1,7 @@
 package com.goldenpond.jmx;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
@@ -14,31 +15,38 @@ public class Client {
 
 	private JMXConnector jmxc;
 
-	public void connect(String host, int port) throws Exception {
-		JMXServiceURL url = new JMXServiceURL("rmi", host, port, "/jndi/rmi://" + host + ":" + port + "/jmxrmi");
-		jmxc = JMXConnectorFactory.connect(url);
-		Print.ln("Get the MBeanServerConnection");
-	}
-
-	public void disconnect() throws Exception {
-		Print.ln("Close the MBeanServerConnection");
-		jmxc.close();
-	}
-
-	public void connect(int pid) throws Exception {
+	public void connect(int pid) {
 		try {
-			String serviceURL = ConnectorAddressLink.importFrom(pid);
-			jmxc = JMXConnectorFactory.connect(new JMXServiceURL(serviceURL));
+			JMXServiceURL url = new JMXServiceURL(ConnectorAddressLink.importFrom(pid));
+			jmxc = JMXConnectorFactory.connect(url);
+			Print.ln("get the MBeanServerConnection");
 		} catch (IOException e) {
-			Print.ln("Cannot find process pid: " + pid);
+			Print.ln("the JMX service was not found with the given pid");
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		Client client = new Client();
-		client.connect("p607023d", 9999);
-		client.disconnect();
+	public void connect(String host, int port) {
+		try {
+			JMXServiceURL url = new JMXServiceURL("rmi", host, port, "/jndi/rmi://" + host + ":" + port + "/jmxrmi");
+			jmxc = JMXConnectorFactory.connect(url);
+			Print.ln("get the MBeanServerConnection");
+		} catch (MalformedURLException e) {
+			Print.ln("the specified url was not well-formed");
+			throw new RuntimeException(e.getMessage());
+		} catch (IOException e) {
+			Print.ln("the JMX service was not found with the given host:port");
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
+	public void disconnect() {
+		try {
+			jmxc.close();
+			Print.ln("closed the MBeanServerConnection");
+		} catch (IOException e) {
+			Print.ln("cannot close MBeanServerConnection gracefully");
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 }
