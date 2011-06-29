@@ -8,8 +8,11 @@ import com.goldenpond.utils.Print;
 public class Executor {
 
 	public boolean runCommand(String[] command, File workingDir) {
+		ProcessBuilder pb = new ProcessBuilder();
+		pb.command(command);
+		pb.directory(workingDir);
 		try {
-			Runtime.getRuntime().exec(command, null, workingDir);
+			pb.start();
 		} catch (IOException e) {
 			Print.ln(e.getMessage());
 			return false;
