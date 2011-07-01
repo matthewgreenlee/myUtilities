@@ -2,6 +2,7 @@ package com.goldenpond.process;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.goldenpond.utils.Print;
 
@@ -11,8 +12,10 @@ public class Executor {
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.command(command);
 		pb.directory(workingDir);
+		pb.redirectErrorStream(true);
 		try {
-			pb.start();
+			Process proc = pb.start();
+			InputStream is = proc.getInputStream();
 		} catch (IOException e) {
 			Print.ln(e.getMessage());
 			return false;
