@@ -19,7 +19,7 @@ public class ExecutorTest {
 
 	@Test
 	public void testRunCommand() {
-		String[] commandLine = new String[]{"cmd", "-h"};
+		String[] commandLine = new String[]{"wbemtest.exe",};
 		File workingDir = new File(System.getProperty("java.io.tmpdir"));
 		assertTrue(executor.runCommand(commandLine , workingDir));
 		
