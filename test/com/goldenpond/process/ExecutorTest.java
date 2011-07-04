@@ -19,11 +19,14 @@ public class ExecutorTest {
 
 	@Test
 	public void testRunCommand() {
-		String[] commandLine = new String[]{"wbemtest.exe",};
-		File workingDir = new File(System.getProperty("java.io.tmpdir"));
-		assertTrue(executor.runCommand(commandLine , workingDir));
+		String[] commandLine;
+		File workingDir;
 		
-		commandLine = new String[]{"unknown"};
+		workingDir = new File("F:\\workspace\\GCode\\commons-utilities\\bin");
+		commandLine = new String[]{"java", "com.goldenpond.process.NativeProcess"};
+		assertTrue(executor.runCommand(commandLine, workingDir));
+		
+		commandLine = new String[]{"java", "com.goldenpond.process.NativeProcess", "throw exception"};
 		assertFalse(executor.runCommand(commandLine, workingDir));
 	}
 }
