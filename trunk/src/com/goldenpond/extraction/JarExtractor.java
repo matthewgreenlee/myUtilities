@@ -14,35 +14,31 @@ import java.util.zip.ZipEntry;
 
 public class JarExtractor {
 
-	public static void extractResourceFromJAR(String jarPath, String resource, String dest) {
-		try {
-			JarFile jar = new JarFile(jarPath);
-			ZipEntry entry = jar.getEntry(resource);
-			File efile = new File(dest, entry.getName());
+	public void extract(String jarPath, String resource, String dest) throws IOException {
+		JarFile jar = new JarFile(jarPath);
+		ZipEntry entry = jar.getEntry(resource);
+		File file = new File(dest, entry.getName());
 
-			InputStream in = new BufferedInputStream(jar.getInputStream(entry));
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(efile));
-			byte[] buffer = new byte[2048];
-			for (;;) {
-				int nBytes = in.read(buffer);
-				if (nBytes <= 0)
-					break;
-				out.write(buffer, 0, nBytes);
-			}
-			out.flush();
-			out.close();
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		InputStream in = new BufferedInputStream(jar.getInputStream(entry));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+		byte[] buffer = new byte[2048];
+		for (;;) {
+			int nBytes = in.read(buffer);
+			if (nBytes <= 0)
+				break;
+			out.write(buffer, 0, nBytes);
 		}
+		out.flush();
+		out.close();
+		in.close();
 	}
 
-	public static void extractAll(String jarFile, String destDir) throws IOException {
-		JarFile jar = new JarFile(jarFile);
+	public void extractAll(String jarPath, String dest) throws IOException {
+		JarFile jar = new JarFile(jarPath);
 		Enumeration<JarEntry> entries = jar.entries();
 		while (entries.hasMoreElements()) {
 			JarEntry file = entries.nextElement();
-			File f = new File(destDir + File.separator + file.getName());
+			File f = new File(dest + File.separator + file.getName());
 			if (file.isDirectory()) {
 				f.mkdir();
 				continue;
