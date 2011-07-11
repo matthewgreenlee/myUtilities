@@ -13,30 +13,30 @@ public class JarExtractorTest {
 
 	private JarExtractor extractor;
 	private String jarPath;
-	private String resource;
 	private String dest;
 	
 	@Before
 	public void setUp() {
 		extractor = new JarExtractor();
-		dest = "./";
-		resource = "A.txt";
+		dest = "./extractionDest";
 		jarPath = "bin/com/goldenpond/extraction/resource.jar";
 	}
 
 	@Test
 	public void testExtract() throws IOException {
+		String resource = "OutOfFolder.txt";
 		extractor.extract(jarPath, resource, dest);
 		assertTrue(new File(dest + File.separator + resource).exists());
 	}
 
 	@Test
 	public void testExtractAll() throws IOException {
-		extractor.extractAll(jarPath, dest);
+		extractor.extract(jarPath, dest);
 	}
 
 	@After
 	public void tearDown() {
-		new File(dest + File.separator + resource).delete();
+		extractor = null;
+		new File(dest).delete();
 	}
 }

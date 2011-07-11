@@ -17,7 +17,14 @@ public class JarExtractor {
 	public void extract(String jarPath, String resource, String dest) throws IOException {
 		JarFile jar = new JarFile(jarPath);
 		ZipEntry entry = jar.getEntry(resource);
-		File file = new File(dest, entry.getName());
+		File destDir = new File(dest);
+		if (!destDir.exists() || destDir.isFile()) {
+			boolean created = destDir.mkdirs();
+			if (!created) {
+				throw new RuntimeException("can not create dest folder");
+			}
+		}
+		File file = new File(destDir, entry.getName());
 
 		InputStream in = new BufferedInputStream(jar.getInputStream(entry));
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
@@ -33,7 +40,7 @@ public class JarExtractor {
 		in.close();
 	}
 
-	public void extractAll(String jarPath, String dest) throws IOException {
+	public void extract(String jarPath, String dest) throws IOException {
 		JarFile jar = new JarFile(jarPath);
 		Enumeration<JarEntry> entries = jar.entries();
 		while (entries.hasMoreElements()) {
