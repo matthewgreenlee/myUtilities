@@ -5,23 +5,6 @@ import java.util.Locale;
 
 
 public final class LocalOs {
-	private static final String FAMILY_OS_400 = "os/400";
-	private static final String FAMILY_Z_OS = "z/os";
-	private static final String FAMILY_WIN9X = "win9x";
-	private static final String FAMILY_OPENVMS = "openvms";
-	private static final String FAMILY_UNIX = "unix";
-	private static final String FAMILY_TANDEM = "tandem";
-	private static final String FAMILY_MAC = "mac";
-	private static final String FAMILY_DOS = "dos";
-	private static final String FAMILY_NETWARE = "netware";
-	private static final String FAMILY_OS_2 = "os/2";
-	private static final String FAMILY_WINDOWS = "windows";
-	private static final String FAMILY_LINUX = "linux";
-	private static final String FAMILY_AIX = "aix";
-	private static final String FAMILY_SOLARIS = "sunos";
-	private static final String FAMILY_HP_UX = "hp-ux";
-	private static final String ARCH_OS_390 = "s390";
-	private static final String ARCH_LINUX_PPC = "ppc";
 	private static final String OS_NAME = System.getProperty("os.name")
 			.toLowerCase(Locale.US);
 
