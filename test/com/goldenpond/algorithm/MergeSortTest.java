@@ -2,8 +2,6 @@ package com.goldenpond.algorithm;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Random;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,11 +17,11 @@ public class MergeSortTest {
 
 	@Test
 	public void testSort() {
-		int[] a = {3, 5, 1, 6, 8};
-		sorter.sort(a);
-		int idxHigh = new Random().nextInt(a.length);
-		int idxLow = new Random().nextInt(idxHigh);
-		assertTrue(a[idxLow] < a[idxHigh]);
+		int[] vals = {3, 5, 1, 6, 8};
+		sorter.sort(vals);
+		for (int i = 0; i < vals.length-1; i++) {
+			assertTrue(vals[i] < vals[i+1]);
+		}
 	}
 
 	@After
