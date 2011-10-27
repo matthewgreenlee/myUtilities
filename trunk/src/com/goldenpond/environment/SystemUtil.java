@@ -1,4 +1,6 @@
-package com.goldenpond.utils;
+package com.goldenpond.environment;
+
+import com.goldenpond.utils.Print;
 
 public class SystemUtil {
 

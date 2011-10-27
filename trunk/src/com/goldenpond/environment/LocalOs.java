@@ -1,4 +1,4 @@
-package com.goldenpond.utils;
+package com.goldenpond.environment;
 
 
 import java.util.Locale;
