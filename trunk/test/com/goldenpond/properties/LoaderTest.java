@@ -20,7 +20,7 @@ public class LoaderTest {
 
 	@Test
 	public void testLoadFile() throws IOException {
-		File file = new File("F:\\workspace\\GCode\\commons-utilities\\test\\com\\goldenpond\\properties\\goldenpond.properties");
+		File file = new File(".\\test\\com\\goldenpond\\properties\\goldenpond.properties");
 		Properties properties = loader.load(file);
 		String actual = properties.getProperty("name");
 		assertEquals("goldenpond", actual);
