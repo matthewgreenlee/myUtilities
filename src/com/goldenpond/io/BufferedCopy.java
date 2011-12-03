@@ -12,10 +12,7 @@ import java.io.IOException;
  */
 public class BufferedCopy {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws IOException {
+	public static void copy(String sourcePath, String targetPath) throws IOException {
 
 		BufferedInputStream in = null;
 		BufferedOutputStream out = null;
@@ -23,8 +20,8 @@ public class BufferedCopy {
 		int b;
 
 		try {
-			in = new BufferedInputStream(new FileInputStream("src/com/goldenpond/io/source.txt"));
-			out = new BufferedOutputStream(new FileOutputStream("src/com/goldenpond/io/buffered.txt"));
+			in = new BufferedInputStream(new FileInputStream(sourcePath));
+			out = new BufferedOutputStream(new FileOutputStream(targetPath));
 			
 			while ((b = in.read()) != -1) {
 				out.write(b);
@@ -40,4 +37,9 @@ public class BufferedCopy {
 		}
 	}
 
+	public static void main(String[] args) throws IOException {
+		final String sourcePath = "src/com/goldenpond/io/source.txt";
+		final String targetPath = "src/com/goldenpond/io/buffered.txt";
+		copy(sourcePath, targetPath);
+	}
 }

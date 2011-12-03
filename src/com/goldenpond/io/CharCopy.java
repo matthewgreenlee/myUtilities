@@ -11,16 +11,17 @@ import java.io.IOException;
 public class CharCopy {
 
 	/**
-	 * @param args
+	 * @param sourcePath TODO
+	 * @param targetPath TODO
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void copy(String sourcePath, String targetPath) throws IOException {
 
 		FileReader reader = null;
 		FileWriter writer = null;
 		
 		try {
-			reader = new FileReader("src/com/goldenpond/io/source.txt");
-			writer = new FileWriter("src/com/goldenpond/io/chars.txt");
+			reader = new FileReader(sourcePath);
+			writer = new FileWriter(targetPath);
 			
 			int c;
 			while ((c = reader.read()) != -1) {
@@ -37,4 +38,7 @@ public class CharCopy {
 		}
 	}
 
+	public static void main(String[] args) throws IOException {
+		copy("src/com/goldenpond/io/source.txt", "src/com/goldenpond/io/chars.txt");
+	}
 }
