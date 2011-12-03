@@ -10,17 +10,14 @@ import java.io.IOException;
  */
 public class ByteCopy {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws IOException {
+	public static void copy(String sourcePath, String targetPath) throws IOException {
 
 		FileInputStream in = null;
 		FileOutputStream out = null;
 
 		try {
-			in = new FileInputStream("src/com/goldenpond/io/source.txt");
-			out = new FileOutputStream("src/com/goldenpond/io/bytes.txt");
+			in = new FileInputStream(sourcePath);
+			out = new FileOutputStream(targetPath);
 			
 			int b;
 			while ((b = in.read()) != -1) {
@@ -37,4 +34,7 @@ public class ByteCopy {
 		}
 	}
 
+	public static void main(String[] args) throws IOException {
+		copy("src/com/goldenpond/io/source.txt", "src/com/goldenpond/io/bytes.txt");
+	}
 }
