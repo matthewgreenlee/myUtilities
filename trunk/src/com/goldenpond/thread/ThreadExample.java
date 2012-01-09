@@ -13,7 +13,6 @@ public class ThreadExample {
 
 class HelloRunnable implements Runnable {
 
-	@Override
 	public void run() {
 		Print.ln("HelloRunnable is saying hello");
 	}
