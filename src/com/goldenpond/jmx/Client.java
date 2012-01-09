@@ -7,14 +7,15 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
-import sun.management.ConnectorAddressLink;
-
 import com.goldenpond.utils.Print;
 
 public class Client {
 
 	private JMXConnector jmxc;
 
+	/*
+	 * commented method since it depends on ConnectorAddressLink which is not a part of standard java API
+	 * but a concrete class implemented by sun
 	public void connect(int pid) {
 		try {
 			JMXServiceURL url = new JMXServiceURL(ConnectorAddressLink.importFrom(pid));
@@ -25,6 +26,7 @@ public class Client {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+	*/
 
 	public void connect(String host, int port) {
 		try {
