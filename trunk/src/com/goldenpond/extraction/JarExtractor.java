@@ -21,11 +21,13 @@ public class JarExtractor {
 		if (!destDir.exists() || destDir.isFile()) {
 			boolean created = destDir.mkdirs();
 			if (!created) {
+			    jar.close();
 				throw new RuntimeException("can not create dest folder");
 			}
 		}
 		File file = new File(destDir, entry.getName());
 
+        new File(file.getParent()).mkdirs();
 		InputStream in = new BufferedInputStream(jar.getInputStream(entry));
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 		byte[] buffer = new byte[2048];
@@ -38,6 +40,7 @@ public class JarExtractor {
 		out.flush();
 		out.close();
 		in.close();
+		jar.close();
 	}
 
 	public void extract(String jarPath, String dest) throws IOException {
@@ -45,11 +48,14 @@ public class JarExtractor {
 		Enumeration<JarEntry> entries = jar.entries();
 		while (entries.hasMoreElements()) {
 			JarEntry file = entries.nextElement();
+			System.out.println("extract the jar entry: " + file.getName());
 			File f = new File(dest + File.separator + file.getName());
 			if (file.isDirectory()) {
-				f.mkdir();
+				f.mkdirs();
 				continue;
 			}
+			// make sure the folder of the output file exists, or you will hit FileNotFoundException
+			new File(f.getParent()).mkdirs();
 			InputStream is = jar.getInputStream(file);
 			FileOutputStream fos = new FileOutputStream(f);
 			while (is.available() > 0) {
@@ -57,7 +63,8 @@ public class JarExtractor {
 			}
 			fos.close();
 			is.close();
-		}		
+		}
+		jar.close();
 	}
 
 }
