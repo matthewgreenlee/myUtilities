@@ -11,8 +11,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-public class JarExtractor {
+public class ZipUtil {
 
 	public void extract(String jarPath, String resource, String dest) throws IOException {
 		JarFile jar = new JarFile(jarPath);
@@ -67,4 +68,17 @@ public class JarExtractor {
 		jar.close();
 	}
 
+	public void listEntries(String filePath) throws IOException {
+	    ZipFile zip = new ZipFile(filePath);
+	    Enumeration<? extends ZipEntry> entries = zip.entries();
+	    while (entries.hasMoreElements()) {
+	        ZipEntry entry = entries.nextElement();
+	        System.out.println(entry.getName());
+	    }
+	    zip.close();
+	}
+
+	public void removeEntry(String filePath, String entry) {
+	    
+	}
 }

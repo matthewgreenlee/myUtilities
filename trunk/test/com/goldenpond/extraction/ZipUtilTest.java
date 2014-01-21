@@ -9,15 +9,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JarExtractorTest {
+public class ZipUtilTest {
 
-	private JarExtractor extractor;
+	private ZipUtil util;
 	private String jarPath;
 	private String dest;
 	
 	@Before
 	public void setUp() {
-		extractor = new JarExtractor();
+		util = new ZipUtil();
 		dest = "./extractionDest";
 		jarPath = "bin/com/goldenpond/extraction/resource.jar";
 	}
@@ -25,18 +25,23 @@ public class JarExtractorTest {
 	@Test
 	public void testExtract() throws IOException {
 		String resource = "OutOfFolder.txt";
-		extractor.extract(jarPath, resource, dest);
+		util.extract(jarPath, resource, dest);
 		assertTrue(new File(dest + File.separator + resource).exists());
 	}
 
 	@Test
+	public void testListEntries() throws IOException {
+	    util.listEntries(jarPath);
+	}
+
+	@Test
 	public void testExtractAll() throws IOException {
-		extractor.extract(jarPath, dest);
+		util.extract(jarPath, dest);
 	}
 
 	@After
 	public void tearDown() {
-		extractor = null;
+		util = null;
 		new File(dest).delete();
 	}
 }
