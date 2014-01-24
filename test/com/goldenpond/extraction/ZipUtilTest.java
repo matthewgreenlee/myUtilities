@@ -30,6 +30,11 @@ public class ZipUtilTest {
 	}
 
 	@Test
+	public void testZip() throws IOException {
+	    util.zip(dest, "bin/com/goldenpond/extraction/resource2.jar");
+	}
+
+	@Test
 	public void testListEntries() throws IOException {
 	    util.listEntries(jarPath);
 	}

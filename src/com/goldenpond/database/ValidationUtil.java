@@ -6,35 +6,32 @@ import java.sql.SQLException;
 
 public class ValidationUtil {
 
-    public static final String ORACLE = "ORACLE";
-    public static final String SQLSERVER = "SQLSERVER";
-
     private static final String ORACLE_DRIVER_CLASS = "oracle.jdbc.driver.OracleDriver";
     private static final String SQLSERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
-    public static void validate(String dbType, String host, int port, String dbName, String user, String password) {
+    public static void validate(DB dbType, String host, int port, String dbName, String user, String password) {
         loadDriver(dbType);
         testConnection(dbType, host, port, dbName, user, password);
     }
 
-    private static void loadDriver(String dbType) {
+    private static void loadDriver(DB type) {
         try {
-            if (ORACLE.equals(dbType)) {
+            if (type.equals(DB.ORACLE)) {
                 Class.forName(ORACLE_DRIVER_CLASS);
             }
-            else if (SQLSERVER.equals(dbType)) {
+            else if (type.equals(DB.SQLSERVER)) {
                 Class.forName(SQLSERVER_DRIVER_CLASS);
             }
             else {
-                throw new RuntimeException("Not supported database:" + dbType);
+                throw new RuntimeException("Not supported database:" + type);
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            throw new RuntimeException("No driver class found for database:" + dbType);
+            throw new RuntimeException("No driver class found for database:" + type);
         }
     }
 
-    private static void testConnection(String dbType, String host, int port, String dbName, String user, String password) {
+    private static void testConnection(DB dbType, String host, int port, String dbName, String user, String password) {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(buildUrl(dbType, host, port, dbName), user, password);
@@ -52,11 +49,11 @@ public class ValidationUtil {
         }
     }
 
-    private static String buildUrl(String dbType, String host, int port, String dbName) {
-        if (ORACLE.equals(dbType)) {
+    private static String buildUrl(DB dbType, String host, int port, String dbName) {
+        if (dbType.equals(DB.ORACLE)) {
             return "jdbc:oracle:thin:@" + host + ":" + port + ":" + dbName;
         }
-        if (SQLSERVER.equals(dbType)) {
+        if (dbType.equals(DB.SQLSERVER)) {
             return "jdbc:sqlserver://"+ host + "\\" + dbName + ":" + port;
         }
         throw new RuntimeException("Not supported database:" + dbType);
@@ -65,8 +62,8 @@ public class ValidationUtil {
     public static void main(String[] args) {
         System.out.println("validation begin");
         try {
-            ValidationUtil.validate("ORACLE", "sh-dums01", 1521, "WIND11D2", "YLI_X22", "YLI_X22");
-            ValidationUtil.validate("SQLSERVER", "sh-srv-mssql", 1433, "wind", "srv003", "srv003");
+            ValidationUtil.validate(DB.ORACLE, "sh-dums01", 1521, "WIND11D2", "YLI_X22", "YLI_X22");
+            ValidationUtil.validate(DB.SQLSERVER, "sh-srv-mssql", 1433, "wind", "srv003", "srv003");
             System.out.println("validation passed");
         }
         catch (Exception e) {
@@ -74,4 +71,9 @@ public class ValidationUtil {
         }
     }
 
+    enum DB {
+        ORACLE,
+        SQLSERVER,
+        MYSQL
+    }
 }

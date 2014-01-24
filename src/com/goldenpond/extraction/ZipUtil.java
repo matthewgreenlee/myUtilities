@@ -3,6 +3,7 @@ package com.goldenpond.extraction;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class ZipUtil {
 
@@ -66,6 +68,27 @@ public class ZipUtil {
 			is.close();
 		}
 		jar.close();
+	}
+
+	public void zip(String sourcePath, String targetPath) throws IOException {
+	    File targetFile = new File(targetPath);
+	    if (!targetFile.exists()) {
+	        targetFile.createNewFile();
+	    }
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile));
+	    File sourceFolder = new File(sourcePath);
+	    for (File file : sourceFolder.listFiles()) {
+	        if (file.isFile()) {
+	            zos.putNextEntry(new ZipEntry(file.getPath()));
+	            InputStream is = new FileInputStream(file);
+	            while (is.available() > 0) {
+	                zos.write(is.read());
+	            }
+	            is.close();
+	            zos.closeEntry();
+	        }
+	    }
+	    zos.close();
 	}
 
 	public void listEntries(String filePath) throws IOException {
