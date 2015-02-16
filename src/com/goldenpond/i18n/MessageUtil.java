@@ -5,6 +5,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.goldenpond.utils.Print;
+
 public class MessageUtil {
 
 	private static Locale locale = Locale.SIMPLIFIED_CHINESE;
@@ -25,7 +27,7 @@ public class MessageUtil {
 
 	public static String getText(String code, String[] args) {
 		
-		ResourceBundle results = ResourceBundle.getBundle("Message", locale, new UTF8Control());
+		ResourceBundle results = ResourceBundle.getBundle("com.goldenpond.i18n.Message", locale, new UTF8Control());
 		String val = null;
 		try {
 			val = results.getString(code);
@@ -37,5 +39,15 @@ public class MessageUtil {
 	}
 
 	public static void main(String[] args) {
+		ResourceBundle rb = ResourceBundle.getBundle("com.goldenpond.i18n.Message", new UTF8Control());
+		Print.ln(rb.getString("key1"));
+		Print.ln(rb.getString("key2"));
+		Print.ln(rb.getString("key3"));
+		
+		ResourceBundle.clearCache();
+		ResourceBundle rb2 = ResourceBundle.getBundle("com.goldenpond.i18n.Message", new UTF8Control());
+		Print.ln(rb2.getString("key1"));
+		Print.ln(rb2.getString("key2"));
+		Print.ln(rb2.getString("key3"));
 	}
 }
